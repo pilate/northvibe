@@ -1,17 +1,16 @@
-#include <TinyNap.h>
 #include <Wire.h>
 
-#include "MMC5983MA.h"
 #include "LSM6DSO.h"
 #include "mi2c.h"
+#include "MMC5983MA.h"
+#include "TinyNap.h"
 
 
 const uint8_t LED_PIN = PB4;
+const uint8_t SERIAL_I2C = 0x11;
 
 MMC5983MA Magneto;
 LSM6DSO AccelGyro;
-
-
 
 void blink(uint8_t times) {
   for (uint8_t i = 0; i < times; i++) {
@@ -24,32 +23,29 @@ void blink(uint8_t times) {
 
 
 void setup() {
-  delay(100);
-
   Wire.begin();
 
   uint8_t whoami = AccelGyro.WhoAmI();
   if (whoami == 0x6C) {
-    blink(1);
+    blink(2);
     AccelGyro.I2CPassthrough();
   }
-  else if (whoami == 0xff) {
-    blink(3);
-  }
-  else {
-    blink(6);
-  }
-  delay(5000);  
 
-  Wire.beginTransmission(I2C_ADDRESS);
-  Wire.write(0x0);
-  Wire.write("testing\r\n", 9);
-  Wire.endTransmission();
-
+  delay(2000);
   Wire.end();
 }
 
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  blink(3);
+
+  Wire.begin();
+  delay(100);
+
+  Magneto.read();
+  I2C_LogString("loopin\r\n", 8);
+
+  Wire.end();
+
+  delay(10000);
 }

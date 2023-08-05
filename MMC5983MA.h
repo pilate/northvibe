@@ -2,7 +2,8 @@
 #define MMC5983MA_h
 
 #include "Arduino.h"
-#include "mi2c.h"
+
+#define MMC5983MA_ADDRESS       0x30
 
 #define MMC5983MA_XOUT_0        0x00
 #define MMC5983MA_XOUT_1        0x01
@@ -19,7 +20,7 @@
 #define MMC5983MA_CONTROL_3     0x0C
 #define MMC5983MA_PRODUCT_ID    0x2F // Should be 0x30
 
-#define MMC5983MA_ADDRESS       0x30
+#define MMC5983MA_CONTROL_0_TM_M 0x01
 
 // Sample rates
 #define MODR_ONESHOT   0x00
@@ -50,13 +51,16 @@
 
 class MMC5983MA
 {
+  private:
+    uint8_t rawData[7];
   public:
     // MMC5983MA(I2Cdev* i2c_bus);
     uint8_t getProductID();
+    void read();
     // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
     // void offsetBias(float * dest1, float * dest2);
     // void reset();
-    // uint8_t status();
+    uint8_t status();
     // void clearInt();
     // void selfTest();
     // void readData(uint32_t * destination);
