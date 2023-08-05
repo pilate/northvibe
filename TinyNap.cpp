@@ -3,11 +3,9 @@
 #include <avr/wdt.h>
 
 
-void tn_wdt_setup(uint8_t wdp)
-{
+void tn_wdt_setup(uint8_t wdp) {
   // WDP3 is 6th bit? cool
-  if (wdp & 0b00001000)
-  {
+  if (wdp & 0b00001000) {
     wdp |= bit(WDP3);
   }
 
@@ -17,8 +15,7 @@ void tn_wdt_setup(uint8_t wdp)
   WDTCR = wdp;
 }
 
-void nap(uint32_t nap_time)
-{
+void nap(uint32_t nap_time) {
   uint16_t timeout;
   uint8_t wdp;
 
@@ -31,10 +28,8 @@ void nap(uint32_t nap_time)
   sleep_enable();
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 
-  for (timeout = 8192, wdp = 9; timeout >= 16; timeout /= 2, wdp--)
-  {
-    while (nap_time >= timeout)
-    {
+  for (timeout = 8192, wdp = 9; timeout >= 16; timeout /= 2, wdp--) {
+    while (nap_time >= timeout) {
       tn_wdt_setup(wdp);
       sei();
       sleep_cpu();
@@ -79,7 +74,6 @@ void nap(uint32_t nap_time)
 //   ADCSRA = old_adcsra;
 // }
 
-ISR(WDT_vect)
-{
+ISR(WDT_vect) {
   wdt_disable();
 }
