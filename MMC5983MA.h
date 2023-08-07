@@ -72,6 +72,9 @@ class MMC5983MA
     // void getOffset(float * destination);
     // void powerDown();
     // void powerUp(uint8_t MODR);
+    int32_t x;
+    int32_t y;
+    int32_t z;
   
   // private:
   // float _mRes;
