@@ -23,7 +23,11 @@ void LSM6DSO::read() {
 
   // Turn accelerometer on
   // b2 = 1.6hz ODR, 2g, second stage filtering
-  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0xb2);
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0b10110010);
+
+  // Turn gyro on
+  // 250dps
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL2_G, 0b00010000);
 
   delay(10);
 
@@ -56,6 +60,21 @@ void LSM6DSO::read() {
   sprintf(message, "accel z: %i\r\n\0", a_z);
   I2C_LogString(message, 150);
 
+  memset(message, 0x00, 150);
+  sprintf(message, "gyro x: %i\r\n\0", g_x);
+  I2C_LogString(message, 150);
+  
+  memset(message, 0x00, 150);
+  sprintf(message, "gyro y: %i\r\n\0", g_y);
+  I2C_LogString(message, 150);
+
+  memset(message, 0x00, 150);
+  sprintf(message, "gyro z: %i\r\n\0", g_z);
+  I2C_LogString(message, 150);
+
   // Turn accelerometer off
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0x0);
+
+  // Turn gyro off
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL2_G, 0x0);
 }

@@ -9,8 +9,10 @@
 #define LSM6DSO_SENSOR_HUB_MASTER_CONFIG   0x14
 
 #define LSM6DSO_CTRL1_XL        0x10
+#define LSM6DSO_CTRL2_G         0x11
 #define LSM6DSO_CTRL5_C         0x14
 #define LSM6DSO_CTRL6_C         0x15
+#define LSM6DSO_CTRL7_G         0x16
 #define LSM6DSO_OUTX_L_G        0x22 // gyro values
 #define LSM6DSO_OUTX_L_A        0x28 // accel values
 
