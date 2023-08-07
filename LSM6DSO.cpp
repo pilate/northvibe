@@ -25,7 +25,7 @@ void LSM6DSO::read() {
   // b2 = 1.6hz ODR, 2g, second stage filtering
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0xb2);
 
-  delay(100);
+  delay(10);
 
   I2C_StartRead(LSM6DSO_ADDRESS, LSM6DSO_OUTX_L_G, 12);
   for (uint8_t i = 0; i < 6; i++) {
@@ -56,4 +56,6 @@ void LSM6DSO::read() {
   sprintf(message, "accel z: %i\r\n\0", a_z);
   I2C_LogString(message, 150);
 
+  // Turn accelerometer off
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0x0);
 }
