@@ -42,14 +42,14 @@ class LSM6DSO {
     // void powerUp(uint8_t MODR);
 
     // accel values
-    int32_t a_x;
-    int32_t a_y;
-    int32_t a_z;
+    int16_t a_x;
+    int16_t a_y;
+    int16_t a_z;
 
     // gyro values
-    int32_t g_x;
-    int32_t g_y;
-    int32_t g_z;
+    int16_t g_x;
+    int16_t g_y;
+    int16_t g_z;
 
   private:
     uint8_t gyroRawData[6];

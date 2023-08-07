@@ -35,16 +35,25 @@ void LSM6DSO::read() {
     accelRawData[i] = (uint8_t)Wire.read();
   }
 
-  char message[100];
+  g_x = (gyroRawData[1] << 8) | gyroRawData[0];
+  g_y = (gyroRawData[3] << 8) | gyroRawData[2];
+  g_z = (gyroRawData[5] << 8) | gyroRawData[4];
 
-  for (uint8_t i = 0; i < 6; i++) {
-    memset(message, 0x00, 100);
-    sprintf(message, "gyro read[%x]: %x\r\n\x00", i, gyroRawData[i]);
-    I2C_LogString(message, 100);
-  }
-  for (uint8_t i = 0; i < 6; i++) {
-    memset(message, 0x00, 100);
-    sprintf(message, "accel read[%x]: %x\r\n\x00", i, accelRawData[i]);
-    I2C_LogString(message, 100);
-  }
+  a_x = (accelRawData[1] << 8) | accelRawData[0];
+  a_y = (accelRawData[3] << 8) | accelRawData[2];
+  a_z = (accelRawData[5] << 8) | accelRawData[4];
+
+  char message[150];
+  memset(message, 0x00, 150);
+  sprintf(message, "accel x: %i\r\n\0", a_x);
+  I2C_LogString(message, 150);
+  
+  memset(message, 0x00, 150);
+  sprintf(message, "accel y: %i\r\n\0", a_y);
+  I2C_LogString(message, 150);
+
+  memset(message, 0x00, 150);
+  sprintf(message, "accel z: %i\r\n\0", a_z);
+  I2C_LogString(message, 150);
+
 }
