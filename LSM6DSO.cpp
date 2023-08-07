@@ -1,4 +1,7 @@
+#include <Wire.h>
+
 #include "LSM6DSO.h"
+#include "mi2c.h"
 
 
 uint8_t LSM6DSO::WhoAmI() {
@@ -6,9 +9,9 @@ uint8_t LSM6DSO::WhoAmI() {
 }
 
 void LSM6DSO::I2CPassthrough() {
-  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_FUNC_CFG_ACCESS, bit(6));  // enable sensor hub access
-  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_SENSOR_HUB_MASTER_CONFIG, bit(4));    // enable pass-through
-  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_FUNC_CFG_ACCESS, 0);       // disable sensor hub access
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_FUNC_CFG_ACCESS, bit(6));           // enable sensor hub access
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_SENSOR_HUB_MASTER_CONFIG, bit(4));  // enable pass-through
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_FUNC_CFG_ACCESS, 0);                // disable sensor hub access
 }
 
 void LSM6DSO::read() {
@@ -21,4 +24,27 @@ void LSM6DSO::read() {
   // Turn accelerometer on
   // b2 = 1.6hz ODR, 2g, second stage filtering
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0xb2);
+
+  delay(100);
+
+  I2C_StartRead(LSM6DSO_ADDRESS, LSM6DSO_OUTX_L_G, 12);
+  for (uint8_t i = 0; i < 6; i++) {
+    gyroRawData[i] = (uint8_t)Wire.read();
+  }
+  for (uint8_t i = 0; i < 6; i++) {
+    accelRawData[i] = (uint8_t)Wire.read();
+  }
+
+  char message[100];
+
+  for (uint8_t i = 0; i < 6; i++) {
+    memset(message, 0x00, 100);
+    sprintf(message, "gyro read[%x]: %x\r\n\x00", i, gyroRawData[i]);
+    I2C_LogString(message, 100);
+  }
+  for (uint8_t i = 0; i < 6; i++) {
+    memset(message, 0x00, 100);
+    sprintf(message, "accel read[%x]: %x\r\n\x00", i, accelRawData[i]);
+    I2C_LogString(message, 100);
+  }
 }

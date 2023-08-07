@@ -21,7 +21,7 @@ void MMC5983MA::read() {
   char message[100];
 
   I2C_Write(MMC5983MA_ADDRESS, MMC5983MA_CONTROL_0, MMC5983MA_CONTROL_0_TM_M);
-  
+
   // put atting into standby for minimum time instead of polling
   nap(16);
 
