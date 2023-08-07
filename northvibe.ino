@@ -43,7 +43,7 @@ void loop() {
   delay(100);
 
   Magneto.read();
-  I2C_LogString("loopin\r\n", 8);
+  AccelGyro.read();
 
   Wire.end();
 

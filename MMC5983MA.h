@@ -53,8 +53,6 @@
 
 class MMC5983MA
 {
-  private:
-    uint8_t rawData[7];
   public:
     // MMC5983MA(I2Cdev* i2c_bus);
     uint8_t getProductID();
@@ -75,8 +73,9 @@ class MMC5983MA
     int32_t x;
     int32_t y;
     int32_t z;
-  
-  // private:
+
+  private:
+    uint8_t rawData[7];  
   // float _mRes;
   // I2Cdev* _i2c_bus;
 };
