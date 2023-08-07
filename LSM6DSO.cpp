@@ -47,31 +47,6 @@ void LSM6DSO::read() {
   a_y = (accelRawData[3] << 8) | accelRawData[2];
   a_z = (accelRawData[5] << 8) | accelRawData[4];
 
-  char message[150];
-  memset(message, 0x00, 150);
-  sprintf(message, "accel x: %i\r\n\0", a_x);
-  I2C_LogString(message, 150);
-  
-  memset(message, 0x00, 150);
-  sprintf(message, "accel y: %i\r\n\0", a_y);
-  I2C_LogString(message, 150);
-
-  memset(message, 0x00, 150);
-  sprintf(message, "accel z: %i\r\n\0", a_z);
-  I2C_LogString(message, 150);
-
-  memset(message, 0x00, 150);
-  sprintf(message, "gyro x: %i\r\n\0", g_x);
-  I2C_LogString(message, 150);
-  
-  memset(message, 0x00, 150);
-  sprintf(message, "gyro y: %i\r\n\0", g_y);
-  I2C_LogString(message, 150);
-
-  memset(message, 0x00, 150);
-  sprintf(message, "gyro z: %i\r\n\0", g_z);
-  I2C_LogString(message, 150);
-
   // Turn accelerometer off
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0x0);
 
