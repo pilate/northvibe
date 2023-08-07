@@ -20,7 +20,9 @@
 #define MMC5983MA_CONTROL_3     0x0C
 #define MMC5983MA_PRODUCT_ID    0x2F // Should be 0x30
 
-#define MMC5983MA_CONTROL_0_TM_M 0x01
+#define MMC5983MA_CONTROL_0_TM_M   0x01
+#define MMC5983MA_CONTROL_0_SET    0b1000
+#define MMC5983MA_CONTROL_0_RESET  0b10000
 
 // Sample rates
 #define MODR_ONESHOT   0x00
@@ -65,8 +67,8 @@ class MMC5983MA
     // void selfTest();
     // void readData(uint32_t * destination);
     // uint8_t readTemperature();
-    // void SET();
-    // void RESET();
+    void SET();
+    void RESET();
     // void getOffset(float * destination);
     // void powerDown();
     // void powerUp(uint8_t MODR);
