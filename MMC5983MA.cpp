@@ -5,8 +5,6 @@
 #include "TinyNap.h"
 
 
-#define SERIAL_I2C 0x11
-
 uint8_t MMC5983MA::status() {
   return I2C_ReadByte(MMC5983MA_ADDRESS, MMC5983MA_STATUS);
 }
