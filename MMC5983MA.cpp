@@ -42,14 +42,17 @@ void MMC5983MA::read() {
   x = ((int32_t)rawData[0] << 10) | ((int32_t)rawData[1] << 2);
   x |= rawData[6] >> 6;
   x -= 1 << 17;
+  x -= x_offset;
 
   y = ((int32_t)rawData[2] << 10) | ((int32_t)rawData[3] << 2);
   y |= (rawData[6] >> 4) & 0b11;
   y -= 1 << 17;
+  y -= y_offset;
 
   z = ((int32_t)rawData[4] << 10) | ((int32_t)rawData[5] << 2);
   z |= (rawData[6] >> 2) & 0b11;
   z -= 1 << 17;
+  z -= z_offset;
 }
 
 void MMC5983MA::getOffsets() {
