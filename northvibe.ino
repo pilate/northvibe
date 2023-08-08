@@ -8,6 +8,8 @@
 
 
 const uint8_t LED_PIN = PB4;
+const uint8_t SWITCH_PIN = PB3;
+
 const uint8_t SERIAL_I2C = 0x11;
 
 MMC5983MA Magneto;
@@ -15,16 +17,22 @@ LSM6DSO AccelGyro;
 DRV2605L Vibe;
 
 void blink(uint8_t times) {
+  blink(times, 250);
+}
+
+void blink(uint8_t times, uint8_t delay) {
   for (uint8_t i = 0; i < times; i++) {
     digitalWrite(LED_PIN, HIGH);
-    nap(256);
+    nap(delay);
     digitalWrite(LED_PIN, LOW);
-    nap(256);
+    nap(delay);
   }
 }
 
 
 void setup() {
+  pinMode(LED_PIN, OUTPUT);
+
   Wire.begin();
 
   // Vibe.init();
