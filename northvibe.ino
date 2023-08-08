@@ -44,14 +44,21 @@ void setup() {
 
   uint8_t whoami = AccelGyro.WhoAmI();
   if (whoami == 0x6C) {
-    blink(2);
+    blink(1);
     AccelGyro.I2CPassthrough();
+  }
+  delay(1000);
+
+  uint8_t product_id = Magneto.getProductID();
+  if (product_id == 0x30) {
+    blink(2);
   }
 
   nap(16);
+
   Magneto.getOffsets();
 
-  delay(2000);
+  nap(2048);
   Wire.end();
 }
 
@@ -60,7 +67,7 @@ void loop() {
   Wire.begin();
   I2C_LogString("looping\r\n\0", 10);
   
-  delay(100);
+  nap(128);
 
   // AccelGyro.enable_accel();
   // Magneto.enable_gyro();
@@ -71,21 +78,21 @@ void loop() {
 
   // AccelGyro.disable_accel();
 
-  char message[100];
+  // char message[100];
 
-  memset(message, 0x00, 100);
-  sprintf(message, "mag x: %i\r\n\0", Magneto.x);
-  I2C_LogString(message, 100);
+  // memset(message, 0x00, 100);
+  // sprintf(message, "mag x: %i\r\n\0", Magneto.x);
+  // I2C_LogString(message, 100);
   
-  memset(message, 0x00, 100);
-  sprintf(message, "mag y: %i\r\n\0", Magneto.y);
-  I2C_LogString(message, 100);
+  // memset(message, 0x00, 100);
+  // sprintf(message, "mag y: %i\r\n\0", Magneto.y);
+  // I2C_LogString(message, 100);
 
-  memset(message, 0x00, 100);
-  sprintf(message, "mag z: %i\r\n\0", Magneto.z);
-  I2C_LogString(message, 100);
+  // memset(message, 0x00, 100);
+  // sprintf(message, "mag z: %i\r\n\0", Magneto.z);
+  // I2C_LogString(message, 100);
 
-  delay(1000);
+  // nap(1024);
 
   // memset(message, 0x00, 100);
   // sprintf(message, "accel x: %i\r\n\0", AccelGyro.a_x);
@@ -135,8 +142,7 @@ void loop() {
     if (abs_x < 2000) {
       blink(3, abs_x / 10);
     }
-
   }
 
-  delay(1000);
+  nap(1024);
 }
