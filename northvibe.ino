@@ -31,7 +31,10 @@ void blink(uint8_t times, uint32_t delay) {
 
 
 void setup() {
-  pinMode(LED_PIN, OUTPUT);
+  ADCSRA = 0;
+
+  // set LED pin to output
+  DDRB |= ( 1 << LED_PIN );
 
   Wire.begin();
 
