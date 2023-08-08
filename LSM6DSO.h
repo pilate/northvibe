@@ -31,6 +31,10 @@ class LSM6DSO {
     // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
     // void offsetBias(float * dest1, float * dest2);
     // void reset();
+    void enable_accel();
+    void disable_accel();
+    void enable_gyro();
+    void disable_gyro();
     // uint8_t status();
     // void clearInt();
     // void selfTest();

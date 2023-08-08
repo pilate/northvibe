@@ -14,7 +14,7 @@ void LSM6DSO::I2CPassthrough() {
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_FUNC_CFG_ACCESS, 0);                // disable sensor hub access
 }
 
-void LSM6DSO::read() {
+void LSM6DSO::enable_accel() {
   // Turn ultra-low-power mode on
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL5_C, bit(LSM6DSO_CTRL5_C_XL_ULP_EN));
 
@@ -24,13 +24,25 @@ void LSM6DSO::read() {
   // Turn accelerometer on
   // b2 = 1.6hz ODR, 2g, second stage filtering
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0b10110010);
+}
 
+void LSM6DSO::disable_accel() {
+  // Turn accelerometer off
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0x0);
+}
+
+void LSM6DSO::enable_gyro() {
   // Turn gyro on
   // 250dps
   I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL2_G, 0b00010000);
+}
 
-  delay(10);
+void LSM6DSO::disable_gyro() {
+  // Turn gyro off
+  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL2_G, 0x0);
+}
 
+void LSM6DSO::read() {
   I2C_StartRead(LSM6DSO_ADDRESS, LSM6DSO_OUTX_L_G, 12);
   for (uint8_t i = 0; i < 6; i++) {
     gyroRawData[i] = (uint8_t)Wire.read();
@@ -46,10 +58,4 @@ void LSM6DSO::read() {
   a_x = (accelRawData[1] << 8) | accelRawData[0];
   a_y = (accelRawData[3] << 8) | accelRawData[2];
   a_z = (accelRawData[5] << 8) | accelRawData[4];
-
-  // Turn accelerometer off
-  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL1_XL, 0x0);
-
-  // Turn gyro off
-  I2C_Write(LSM6DSO_ADDRESS, LSM6DSO_CTRL2_G, 0x0);
 }

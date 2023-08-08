@@ -22,7 +22,7 @@ void MMC5983MA::read() {
 
   I2C_Write(MMC5983MA_ADDRESS, MMC5983MA_CONTROL_0, MMC5983MA_CONTROL_0_TM_M);
 
-  // put atting into standby for minimum time instead of polling
+  // put attiny into standby for minimum time instead of polling
   nap(16);
 
   // uint8_t curStatus;
@@ -44,12 +44,30 @@ void MMC5983MA::read() {
   x -= 1 << 17;
 
   y = ((int32_t)rawData[2] << 10) | ((int32_t)rawData[3] << 2);
-  y |= (rawData[6] >> 4) | 0b11;
+  y |= (rawData[6] >> 4) & 0b11;
   y -= 1 << 17;
 
   z = ((int32_t)rawData[4] << 10) | ((int32_t)rawData[5] << 2);
-  z |= (rawData[6] >> 2) | 0b11;
+  z |= (rawData[6] >> 2) & 0b11;
   z -= 1 << 17;
+}
+
+void MMC5983MA::getOffsets() {
+  uint32_t tmp_x, tmp_y, tmp_z;
+
+  SET();
+  read();
+
+  tmp_x = x;
+  tmp_y = y;
+  tmp_z = z;
+
+  RESET();
+  read();  
+
+  x_offset = (tmp_x + x) / 2;
+  y_offset = (tmp_y + y) / 2;
+  z_offset = (tmp_z + z) / 2;
 }
 
 uint8_t MMC5983MA::getProductID() {
