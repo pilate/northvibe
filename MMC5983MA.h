@@ -51,35 +51,34 @@
 #define MSET_1000  0x06
 #define MSET_2000  0x07
 
-class MMC5983MA
-{
-  public:
-    // MMC5983MA(I2Cdev* i2c_bus);
-    // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
-    // void offsetBias(float * dest1, float * dest2);
-    // void reset();
-    uint8_t status();
-    // void clearInt();
-    // void selfTest();
-    // void readData(uint32_t * destination);
-    // uint8_t readTemperature();
-    void SET();
-    void RESET();
-    void read();
-    void getOffsets();
-    uint8_t getProductID();
-    // void getOffset(float * destination);
-    // void powerDown();
-    // void powerUp(uint8_t MODR);
-    int32_t x;
-    int32_t y;
-    int32_t z;
-    int32_t x_offset;
-    int32_t y_offset;
-    int32_t z_offset;
+class MMC5983MA {
+public:
+  // MMC5983MA(I2Cdev* i2c_bus);
+  // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
+  // void offsetBias(float * dest1, float * dest2);
+  // void reset();
+  uint8_t status();
+  // void clearInt();
+  // void selfTest();
+  // void readData(uint32_t * destination);
+  // uint8_t readTemperature();
+  void SET();
+  void RESET();
+  void read();
+  void getOffsets();
+  uint8_t getProductID();
+  // void getOffset(float * destination);
+  // void powerDown();
+  // void powerUp(uint8_t MODR);
+  int32_t x;
+  int32_t y;
+  int32_t z;
+  int32_t x_offset;
+  int32_t y_offset;
+  int32_t z_offset;
 
-  private:
-    uint8_t rawData[7];  
+private:
+  uint8_t rawData[7];
   // float _mRes;
   // I2Cdev* _i2c_bus;
 };

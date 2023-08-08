@@ -24,44 +24,44 @@
 #define LSM6DSO_WHO_AM_I        0x0f  // Should be 0x6C
 
 class LSM6DSO {
-  public:
-    // MMC5983MA(I2Cdev* i2c_bus);
-    uint8_t WhoAmI();
-    void I2CPassthrough();
-    // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
-    // void offsetBias(float * dest1, float * dest2);
-    // void reset();
-    void enable_accel();
-    void disable_accel();
-    void enable_gyro();
-    void disable_gyro();
-    // uint8_t status();
-    // void clearInt();
-    // void selfTest();
-    void read();
-    // void readData(uint32_t * destination);
-    // uint8_t readTemperature();
-    // void SET();
-    // void RESET();
-    // void getOffset(float * destination);
-    // void powerDown();
-    // void powerUp(uint8_t MODR);
+public:
+  // MMC5983MA(I2Cdev* i2c_bus);
+  uint8_t WhoAmI();
+  void I2CPassthrough();
+  // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
+  // void offsetBias(float * dest1, float * dest2);
+  // void reset();
+  void enable_accel();
+  void disable_accel();
+  void enable_gyro();
+  void disable_gyro();
+  // uint8_t status();
+  // void clearInt();
+  // void selfTest();
+  void read();
+  // void readData(uint32_t * destination);
+  // uint8_t readTemperature();
+  // void SET();
+  // void RESET();
+  // void getOffset(float * destination);
+  // void powerDown();
+  // void powerUp(uint8_t MODR);
 
-    // accel values
-    int16_t a_x;
-    int16_t a_y;
-    int16_t a_z;
+  // accel values
+  int16_t a_x;
+  int16_t a_y;
+  int16_t a_z;
 
-    // gyro values
-    int16_t g_x;
-    int16_t g_y;
-    int16_t g_z;
+  // gyro values
+  int16_t g_x;
+  int16_t g_y;
+  int16_t g_z;
 
-  private:
-    uint8_t gyroRawData[6];
-    uint8_t accelRawData[6];
-    // float _mRes;
-    // I2Cdev* _i2c_bus;
+private:
+  uint8_t gyroRawData[6];
+  uint8_t accelRawData[6];
+  // float _mRes;
+  // I2Cdev* _i2c_bus;
 };
 
 #endif

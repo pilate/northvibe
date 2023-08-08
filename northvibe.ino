@@ -1,5 +1,6 @@
 #include <Wire.h>
 
+#include "DRV2605L.h"
 #include "LSM6DSO.h"
 #include "mi2c.h"
 #include "MMC5983MA.h"
@@ -11,6 +12,7 @@ const uint8_t SERIAL_I2C = 0x11;
 
 MMC5983MA Magneto;
 LSM6DSO AccelGyro;
+DRV2605L Vibe;
 
 void blink(uint8_t times) {
   for (uint8_t i = 0; i < times; i++) {
@@ -24,6 +26,10 @@ void blink(uint8_t times) {
 
 void setup() {
   Wire.begin();
+
+  // Vibe.init();
+  // delay(500);
+  // Vibe.effect(14, 128);    
 
   uint8_t whoami = AccelGyro.WhoAmI();
   if (whoami == 0x6C) {
