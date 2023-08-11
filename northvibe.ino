@@ -13,7 +13,7 @@ const uint8_t SERIAL_I2C = 0x11;
 MMC5983MA Magneto;
 LSM6DSO AccelGyro;
 DRV2605L Vibe;
-#define SAMPLE_RATE (128) // replace this with actual sample rate
+#define SAMPLE_RATE (128) // milliseconds to nap between samples
 
 void blink(uint8_t times, uint32_t delay) {
   for (uint8_t i = 0; i < times; i++) {
@@ -24,12 +24,6 @@ void blink(uint8_t times, uint32_t delay) {
   }
 }
 
-void crossProduct(float v_A[], float v_B[], float c_P[]) {
-   c_P[0] = v_A[1] * v_B[2] - v_A[2] * v_B[1];
-   c_P[1] = -(v_A[0] * v_B[2] - v_A[2] * v_B[0]);
-   c_P[2] = v_A[0] * v_B[1] - v_A[1] * v_B[0];
-}
-
 void setup() {
   /*
    * 1. Initialize GPIO
@@ -37,8 +31,7 @@ void setup() {
    * 3. Initialize Accel/Gyro (LSM6DSO) and enable passthru
    * 4. Initialize Mag (MMC5983)
    * 5. Configure Accel/Gyro power settings and sensitivity
-   * 6. Initialize position
-   * 7. Blink and Vibe to signal boot
+   * 6. Blink and Vibe to signal boot
    */
 
   uint8_t setup_success = 1;
@@ -48,6 +41,8 @@ void setup() {
   // set LED pin to output
   DDRB |= ( 1 << LED_PIN );
   /* 2. Initialize Vibe */
+  // Allow I2C
+  Wire.begin();
   Vibe.init();
   /* 3. Initialize Accel/Gyro (LSM6DSO) and enable passthru */
   uint8_t whoami = AccelGyro.WhoAmI();
@@ -69,42 +64,67 @@ void setup() {
   AccelGyro.enable_accel();
   AccelGyro.enable_gyro();
 
-  /* 6. Initialize position (assume laying flat on table?) */
-  //Quaternion_setIdentity(&g_cur_pos);
-
-  /* 7. Blink and Vibe to signal boot */
+  /* 6. Blink and Vibe to signal boot */
   Vibe.effect(14, 128);  
   blink(5, 256);
+  Wire.end();
 }
 
 void loop() {
   /* 
-   *
    * 1) Poll the sensors 
-   * 2) Create Vectors
+   * 2) Build sensor data vectors
    * 3) Calculate North-East-Down coodinates
    * 4) Vibe when pointing North 
+   * 5) Enable LED toggle when pitched on horizon
+   * 6) Sleep until next sample
    */
 
+  /* 1) Poll the sensors */
+  Wire.begin();
   Magneto.read();
   AccelGyro.read();
 
-  // Acquire latest sensor data
-  FusionVector gyroscope = {AccelGyro.g_x,  AccelGyro.g_x,  AccelGyro.g_x};
-  FusionVector accelerometer = {AccelGyro.a_x,  AccelGyro.a_y,  AccelGyro.a_z};
-  FusionVector magnetometer = {Magneto.x, Magneto.y, Magneto.z };
+  /* 2) Build sensor data vectors */
+  FusionVector gyroscope =     {(float) AccelGyro.g_x, \
+                                (float) AccelGyro.g_x, \
+                                (float) AccelGyro.g_x};
+  FusionVector accelerometer = {(float)AccelGyro.a_x,  \
+                                (float)AccelGyro.a_y,  \
+                                (float)AccelGyro.a_z};
+  FusionVector magnetometer =  {(float)Magneto.x,      \
+                                (float)Magneto.y,      \
+                                (float)Magneto.z };
 
-  const FusionVector up = FusionVectorMultiplyScalar(accelerometer, -1.0f);
-  const FusionVector west = FusionVectorNormalise(FusionVectorCrossProduct(up, magnetometer));
-  const FusionVector north = FusionVectorNormalise(FusionVectorCrossProduct(west, up));
+  /* 3) Calculate North-East-Down coodinates
+   * Orientation Calculation:
+   *  - Accelerometer points down at rest, find "up" by inverting
+   *  - Magnetometer points north, calculate "west" using cross product
+   *    of "up" and magnetometer
+   *  - "north" can be found by cross product of "west" and "up" again.
+   */
+  FusionVector up = FusionVectorMultiplyScalar(accelerometer, -1.0f);
+  FusionVector west = FusionVectorNormalise(FusionVectorCrossProduct(up, magnetometer));
+  FusionVector north = FusionVectorNormalise(FusionVectorCrossProduct(west, up));
 
+  /* 4) Vibe when pointing North */
+  bool pointing_north = false;
+  if (FusionVectorMagnitude(west) < 0.2f) {
+    pointing_north = true;
+    Vibe.effect(14, 128);  
+  }
+
+  // Debug print
   char message[100];
   memset(message, 0x00, 100);
-  sprintf(message, "%f %f %fr\n\0", north.axis.x, north.axis.y, north.axis.z);
+  sprintf(message, "%f %f %f\r\n\0", north.axis.x, north.axis.y, north.axis.z);
   I2C_LogString(message, 100);
+  Wire.end();
 
-  nap(SAMPLE_RATE);
-
+  /* 5) Enable LED toggle when pitched on horizon */
   /* Toggle the LED */
   //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+
+  /* 6) Sleep until next sample */
+  nap(SAMPLE_RATE);
 }
