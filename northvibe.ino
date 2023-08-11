@@ -62,7 +62,7 @@ void setup() {
   }
   /* 5. Configure Accel/Gyro power settings and sensitivity */
   AccelGyro.enable_accel();
-  AccelGyro.enable_gyro();
+  // AccelGyro.enable_gyro();
 
   /* 6. Blink and Vibe to signal boot */
   // Vibe.effect(14, 128);  
@@ -86,9 +86,11 @@ void loop() {
   AccelGyro.read();
 
   /* 2) Build sensor data vectors */
+  /* 
   FusionVector gyroscope =     {(float) AccelGyro.g_x, \
-                                (float) AccelGyro.g_x, \
-                                (float) AccelGyro.g_x};
+                                 (float) AccelGyro.g_x, \
+                                 (float) AccelGyro.g_x};
+  */
   FusionVector accelerometer = {(float)AccelGyro.a_x,  \
                                 (float)AccelGyro.a_y,  \
                                 (float)AccelGyro.a_z};
