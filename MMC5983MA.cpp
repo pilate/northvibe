@@ -68,6 +68,8 @@ void MMC5983MA::getOffsets() {
   RESET();
   read();  
 
+  SET();
+
   x_offset = (tmp_x + x) / 2;
   y_offset = (tmp_y + y) / 2;
   z_offset = (tmp_z + z) / 2;

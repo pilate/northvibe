@@ -39,7 +39,7 @@ void DRV2605L::init() {
 void DRV2605L::effect(uint8_t pattern, uint8_t post_delay) {
   // Come out of standby
   I2C_Write(DRV2605L_ADDRESS, 0x01, 0);
-  nap(128);
+  // nap(128);
 
   // write pattern
   I2C_Write(DRV2605L_ADDRESS, 0x04, pattern);
