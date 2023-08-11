@@ -13,7 +13,7 @@ const uint8_t SERIAL_I2C = 0x11;
 MMC5983MA Magneto;
 LSM6DSO AccelGyro;
 DRV2605L Vibe;
-#define SAMPLE_RATE (128) // milliseconds to nap between samples
+#define SAMPLE_RATE (1024) // milliseconds to nap between samples
 
 void blink(uint8_t times, uint32_t delay) {
   for (uint8_t i = 0; i < times; i++) {
@@ -43,7 +43,7 @@ void setup() {
   /* 2. Initialize Vibe */
   // Allow I2C
   Wire.begin();
-  // Vibe.init();
+  Vibe.init();
   /* 3. Initialize Accel/Gyro (LSM6DSO) and enable passthru */
   uint8_t whoami = AccelGyro.WhoAmI();
   if (setup_success && whoami == 0x6C) {
