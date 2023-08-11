@@ -110,33 +110,34 @@ void loop() {
   /* 4) Vibe when pointing North */
 
   /* North Orientation:
-   *    
-   *    Z   Y
-   *    |  /
-   *    | /
+   *             
+   *    Z   Y 
+   *    |  /  
+   *    | /  
    *    |/______X
-   *   Right side up:         Upside Down:
-   *   West  = [ 1, 0, 0 ]   [ -1 ,0, 0 ]
-   *   North = [ 0, 1, 0 ]   [ 0, -1, 0 ]
-   *   Down  = [ 0, 0, 1 ]   [ 0, 0, -1 ]
+   *   Right side up:         Upside Down:     North is Down
+   *   West  = [ 1, 0, 0 ]   [ -1, 0, 0 ]      [ -1, 0, 0 ]
+   *   North = [ 0, 1, 0 ]   [ 0, -1, 0 ]      [ 0, ]
+   *   Down  = [ 0, 0, 1 ]   [ 0, 0, -1 ]      [ 0, ]
    */
   bool pointing_north = false;
-  float threshold = 0.2f;
-  if (north.axis.y + threshold > 1.0f && west.axis.x + threshold > 1.0f) {
+  float threshold = 0.3f;
+
+  
+  float heading_deg = atan2(north.axis.x, west.axis.x) * 180.0/M_PI;
+  if (heading_deg > 360.0f) {
+    heading_deg = heading_deg - 360.0f;
+  }
+  if (heading_deg < threshold || heading_deg + threshold > 360.0f) {
     pointing_north = true;
     Vibe.effect(14, 128);  
   }
 
-  // Debug print
-  char message[100];
-  memset(message, 0x00, 100);
-  sprintf(message, "%f %f %f\r\n\0", north.axis.x, north.axis.y, north.axis.z);
-  I2C_LogString(message, 100);
   Wire.end();
 
   /* 5) Enable LED toggle when pitched on horizon */
   /* Toggle the LED */
-  //digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+  digitalWrite(LED_PIN, !digitalRead(LED_PIN));
 
   /* 6) Sleep until next sample */
   nap(SAMPLE_RATE);
