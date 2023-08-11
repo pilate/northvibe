@@ -108,8 +108,21 @@ void loop() {
   FusionVector north = FusionVectorNormalise(FusionVectorCrossProduct(west, up));
 
   /* 4) Vibe when pointing North */
+
+  /* North Orientation:
+   *    
+   *    Z   Y
+   *    |  /
+   *    | /
+   *    |/______X
+   *   Right side up:         Upside Down:
+   *   West  = [ 1, 0, 0 ]   [ -1 ,0, 0 ]
+   *   North = [ 0, 1, 0 ]   [ 0, -1, 0 ]
+   *   Down  = [ 0, 0, 1 ]   [ 0, 0, -1 ]
+   */
   bool pointing_north = false;
-  if (FusionVectorMagnitude(west) < 0.2f) {
+  float threshold = 0.2f;
+  if (north.axis.y + threshold > 1.0f && west.axis.x + threshold > 1.0f) {
     pointing_north = true;
     Vibe.effect(14, 128);  
   }
