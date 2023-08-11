@@ -120,31 +120,18 @@ void loop() {
    *   North = [ 0, 1, 0 ]   [ 0, -1, 0 ]      [ 0, ]
    *   Down  = [ 0, 0, 1 ]   [ 0, 0, -1 ]      [ 0, ]
    */
-  bool pointing_north = false;
   float threshold = 50.0f;
-
   
   float heading_deg = atan2(north.axis.x, west.axis.x) * 180.0/M_PI;
-  // if (heading_deg > 360.0f) {
-  //   heading_deg = (heading_deg)  360.0f;
-  // }
   if ((heading_deg < threshold) && (heading_deg > (-1 * threshold))) {
-    // pointing_north = true;
     Vibe.effect(14, 128);  
   }
 
   // char message[20];
-  // char
-  //   hF[6];
-
-  // dtostrf( north.axis.x, 4, 2, xF );
-  // dtostrf( north.axis.y, 4, 2, yF );
-  // dtostrf( north.axis.z, 4, 2, zF );
+  // char hF[6];
   // dtostrf(heading_deg, 4, 2, hF);
-
   // sprintf(message, "heading: %s\r\n\0", hF);
   // I2C_LogString(message, 20);
-
 
   Wire.end();
 
