@@ -82,6 +82,7 @@ void loop() {
 
   /* 1) Poll the sensors */
   Wire.begin();
+
   Magneto.read();
   AccelGyro.read();
 
@@ -122,11 +123,13 @@ void loop() {
    *   North = [ 0, 1, 0 ]   [ 0, -1, 0 ]      [ 0, ]
    *   Down  = [ 0, 0, 1 ]   [ 0, 0, -1 ]      [ 0, ]
    */
-  float threshold = 40.0f;
+  float threshold = 25.0f;
+  float dec = 11.8f;
   
-  float heading_deg = atan2(north.axis.x, west.axis.x) * 180.0/M_PI;
+  float heading_deg = (atan2(north.axis.x, west.axis.x) * 180.0/M_PI);
   if ((heading_deg < threshold) && (heading_deg > (-1 * threshold))) {
-    Vibe.effect(14, 128);  
+    blink(1, 0);
+    // Vibe.effect(10, 128);  
   }
 
   // char message[20];

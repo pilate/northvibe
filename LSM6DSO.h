@@ -10,6 +10,7 @@
 
 #define LSM6DSO_CTRL1_XL        0x10
 #define LSM6DSO_CTRL2_G         0x11
+#define LSM6DSO_CTRL3_C         0x12
 #define LSM6DSO_CTRL5_C         0x14
 #define LSM6DSO_CTRL6_C         0x15
 #define LSM6DSO_CTRL7_G         0x16
@@ -30,7 +31,7 @@ public:
   void I2CPassthrough();
   // void init(uint8_t MODR, uint8_t MBW, uint8_t MSET);
   // void offsetBias(float * dest1, float * dest2);
-  // void reset();
+  void reset();
   void enable_accel();
   void disable_accel();
   void enable_gyro();
